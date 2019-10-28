@@ -9,8 +9,6 @@ async function Geolocation(address) {
     }
   });
 
-  //formatted_address, location(lat, long), address coomponents
-
   const geolocation_data = {
     formatted_address: request.data.results[0].formatted_address,
     location: request.data.results[0].geometry.location,
