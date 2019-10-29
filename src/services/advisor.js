@@ -1,40 +1,53 @@
 import Axios from 'axios';
 
-async function AdvisorWeather(cityId) {
-  window.console.log('rodou');
-  const request = await Axios.get(`http://apiadvisor.climatempo.com.br/api/v1/weather/locale/${cityId}/current`,
-    {
+async function AdvisorTemperature(cityId) {
+  try {
+    const request = await Axios.get(`http://apiadvisor.climatempo.com.br/api/v1/climate/temperature/locale/${cityId}`, {
       params: {
-        token: '92420844fa6f91bf74f679f7883d2c14',
-        id: cityId,
+        token: '47197015fcc3a1b6b6546a419e479baa',
       }
     });
 
-  return request.data;
+    return request.data;
+  } catch (error) {
+    window.console.log('error in advisorWeather: ' + error.message);
+  }
+
 }
 
 async function advisorCityData(city) {
-  const request = await Axios.get('http://apiadvisor.climatempo.com.br/api/v1/locale/city',
-    {
-      params: {
-        name: city,
-        state: 'AL',
-        token: '92420844fa6f91bf74f679f7883d2c14',
-      }
-    });
+  try {
+    const request = await Axios.get('http://apiadvisor.climatempo.com.br/api/v1/locale/city',
+      {
+        params: {
+          name: city,
+          state: 'AL',
+          token: '47197015fcc3a1b6b6546a419e479baa',
+        },
+      });
 
-  const { id, name, state, country } = request.data[0];
+    const { id, name, state, country } = request.data[0];
 
-  const city_params = { id, name, state, country };
+    const city_params = { id, name, state, country };
+    window.console.log(city_params);
 
-  return city_params;
+    return city_params;
+  } catch (err) {
+    window.console.log('error in advisorCityData: ' + err.message);
+  }
+
 }
 
 async function weather(city) {
   const cityData = await advisorCityData(city);
-  const cityWeather = await AdvisorWeather(cityData.id);
+  const cityWeather = await AdvisorTemperature(cityData.id);
 
   return cityWeather;
 }
 
-export default weather;
+const methods = {
+  weather,
+  advisorCityData
+}
+
+export default methods;
