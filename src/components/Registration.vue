@@ -5,6 +5,7 @@
       <input v-model="name" type="text" placeholder="Nome" />
       <input v-model="email" type="text" placeholder="Email" />
       <input v-model="password" type="password" placeholder="Senha" />
+      <input v-model="password_repeat" type="password" placeholder="Digite a senha novamente" />
       <button id="btn" v-on:click="entry">Criar conta</button>
     </form>
   </div>
@@ -18,7 +19,8 @@ export default {
     return {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      password_repeat: ""
     };
   },
   methods: {
@@ -27,6 +29,11 @@ export default {
 
       if (!this.email || !this.name || !this.password) {
         alert("Preencha todos os campos para completar o cadastro");
+        return;
+      }
+
+      if (this.password !== this.password_repeat) {
+        alert("As senhas digitadas são diferentes");
         return;
       }
 
