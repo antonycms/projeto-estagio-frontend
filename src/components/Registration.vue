@@ -4,7 +4,7 @@
       <h6>Registrar</h6>
       <input v-model="name" type="text" placeholder="Nome" />
       <input v-model="email" type="text" placeholder="Email" />
-      <input v-model="password" type="text" placeholder="Senha" />
+      <input v-model="password" type="password" placeholder="Senha" />
       <button id="btn" v-on:click="entry">Criar conta</button>
     </form>
   </div>

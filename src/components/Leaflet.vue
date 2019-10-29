@@ -23,15 +23,38 @@ export default {
       lat: "",
       long: "",
       locale: {},
-      temp: "0"
+      temp: "0",
+      theMarker: {}
     };
   },
   methods: {
+    showOnMap() {
+      //zoom in city
+      this.mymap.setView([this.lat, this.long], 12);
+
+      if (this.theMarker) {
+        this.mymap.removeLayer(this.theMarker);
+      }
+      //create marker on map
+      this.theMarker = window.L.marker([this.lat, this.long]).addTo(this.mymap);
+
+      //mouseover
+      this.theMarker.on("mouseover", () => {
+        window.L.popup()
+          .setLatLng([this.lat, this.long])
+          .setContent(`${this.city}`)
+          .openOn(this.mymap);
+      });
+
+      //on click
+      this.theMarker.bindPopup(`${this.city} <br> temp: ${this.temp}°`);
+    },
     async getTemperature(event) {
       event.preventDefault();
 
       advisor.weather(this.city);
     },
+
     async saveCity(event) {
       event.preventDefault();
 
@@ -49,6 +72,7 @@ export default {
         alert("A cidade ja foi salva no banco de dados");
       }
     },
+
     async searchCity(event) {
       event.preventDefault();
 
@@ -89,12 +113,10 @@ export default {
         return;
       }
 
-      this.mymap.setView([this.lat, this.long], 12);
-      const marker = window.L.marker([this.lat, this.long]).addTo(this.mymap);
-
-      marker.bindPopup(`${this.city} <br> temp: ${this.temp}°`);
+      this.showOnMap();
     }
   },
+
   mounted() {
     this.mymap = window.L.map("map").setView([-9.6498487, -35.7089492], 9);
 
