@@ -1,10 +1,10 @@
 <template>
   <div id="template-main">
-    <form>
+    <form id="login">
       <h6>Login</h6>
       <input v-model="email" type="text" placeholder="Email" />
       <input v-model="password" type="text" placeholder="Senha" />
-      <button v-on:click="entry">Entrar</button>
+      <button id="btn" v-on:click="entry">Entrar</button>
       <a v-on:click="register">Criar conta</a>
     </form>
   </div>
@@ -12,6 +12,7 @@
 
 <script>
 import api from "../services/api";
+import jwt from "jsonwebtoken";
 
 export default {
   data() {
@@ -42,12 +43,16 @@ export default {
           password: this.password
         });
 
+        api.defaults.headers.authorizathion = "bearer " + res.data.token;
+
+        const name = jwt.decode(res.data.token).name;
+
         this.$cookies.set("token", res.data.token, "1d");
-        this.$cookies.set("userId", res.data.userId, "1d");
+        this.$cookies.set("user", name);
 
         this.$router.push({ path: "/home" });
       } catch ({ message }) {
-        window.alert("Email ou senha invalidos!");
+        window.alert("Email ou senha invalidos! " + message);
       }
     }
   }
@@ -58,24 +63,24 @@ export default {
 <style>
 #template-main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-form {
+#login {
   width: 100%;
   max-width: 300px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  font-family: Arial, Helvetica, sans-serif;
 }
-form > h6 {
+#login > h6 {
   margin-bottom: 10px;
   font-size: 30px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
-form > input {
+#login > input {
   margin-top: 10px;
   width: 100%;
   padding: 0 20px;
@@ -84,7 +89,7 @@ form > input {
   border-radius: 4px;
 }
 
-form > button {
+#login > #btn {
   margin-top: 20px;
   border: 0;
   border-radius: 4px;
@@ -96,10 +101,18 @@ form > button {
   font-weight: bold;
 }
 
-form > a {
+#login > #btn:hover {
+  background-color: #b366ff;
+}
+
+#login > a {
   color: gray;
   font-size: 15px;
   margin-top: 5px;
   cursor: pointer;
+}
+
+#login > a:hover {
+  color: #b366ff;
 }
 </style>
