@@ -52,7 +52,7 @@ export default {
 
         this.$router.push({ path: "/home" });
       } catch ({ message }) {
-        window.alert("Email ou senha invalidos! " + message);
+        window.alert("Email ou senha invalidos!");
       }
     }
   }

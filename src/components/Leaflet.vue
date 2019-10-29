@@ -92,13 +92,6 @@ export default {
       this.mymap.setView([this.lat, this.long], 12);
       const marker = window.L.marker([this.lat, this.long]).addTo(this.mymap);
 
-      marker.on("mouseover", () => {
-        window.L.popup()
-          .setLatLng([this.lat, this.long])
-          .setContent(`${this.city}`)
-          .openOn(this.mymap);
-      });
-
       marker.bindPopup(`${this.city} <br> temp: ${this.temp}°`);
     }
   },
